@@ -15,7 +15,7 @@ type Config struct {
 	DBPassword             string
 	DBAddress              string
 	DBName                 string
-	JWTExpiratoinInSeconds int64
+	JWTExpirationInSeconds int64
 	JWTSecret              string
 }
 
@@ -32,10 +32,11 @@ func initConfig() Config {
 		DBAddress:              fmt.Sprintf("%s:%s", getEnv("DB_HOST", "localhost"), getEnv("DB_PORT", "3306")),
 		DBName:                 getEnv("DB_NAME", "ecom"),
 		JWTSecret:              getEnv("JWT_SECRET", "not-secret-anymore"),
-		JWTExpiratoinInSeconds: getEnvAsInt("JWT_EXP", 3600*24*7),
+		JWTExpirationInSeconds: getEnvAsInt("JWT_EXP", 3600*24*7),
 	}
 }
 
+// gets the env by key or fallbacks
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value

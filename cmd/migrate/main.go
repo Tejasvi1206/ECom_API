@@ -6,14 +6,15 @@ import (
 
 	"github.com/Tejasvi1206/ECom_API/config"
 	"github.com/Tejasvi1206/ECom_API/db"
-	mysqlCfg "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // mysql driver
+	mysqlDriver "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/mysql"
+	mysqlMigrate "github.com/golang-migrate/migrate/v4/database/mysql"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
-	db, err := db.NewMySQLStorage(mysqlCfg.Config{
+	cfg := mysqlDriver.Config{
 		User:                 config.Envs.DBUser,
 		Passwd:               config.Envs.DBPassword,
 		Addr:                 config.Envs.DBAddress,
@@ -21,13 +22,14 @@ func main() {
 		Net:                  "tcp",
 		AllowNativePasswords: true,
 		ParseTime:            true,
-	})
+	}
 
+	db, err := db.NewMySQLStorage(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	driver, _ := mysql.WithInstance(db, &mysql.Config{})
+	driver, err := mysqlMigrate.WithInstance(db, &mysqlMigrate.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +43,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	cmd := os.Args[(len(os.Args) - 1)]
+	v, d, _ := m.Version()
+	log.Printf("Version: %d, dirty: %v", v, d)
+
+	cmd := os.Args[len(os.Args)-1]
 	if cmd == "up" {
 		if err := m.Up(); err != nil && err != migrate.ErrNoChange {
 			log.Fatal(err)
@@ -52,4 +57,5 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+
 }
