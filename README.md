@@ -28,36 +28,9 @@ This project demonstrates clean backend architecture, authentication, and contai
 
 ---
 
-## 📁 Project Structure
-
-ECom_API/
-│
-├── cmd/
-│ └── main.go
-├── service/
-│ ├── auth/
-│ ├── user/
-│ ├── product/
-│ ├── cart/
-│ └── order/
-├── db/
-├── types/
-├── utils/
-│
-├── Dockerfile
-├── docker-compose.yml
-├── .dockerignore
-├── .env
-├── go.mod
-└── README.md
-
-
----
-
 ## 🐳 Run with Docker (Recommended)
 
 ### 1️⃣ Clone the repository
-```bash
 git clone https://github.com/Tejasvi1206/ECom_API.git
 cd ECom_API
 
