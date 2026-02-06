@@ -25,9 +25,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	initStorage(db)
+	initStorage(db) //Confirms DB is reachable at startup and Avoids runtime crashes later
 
-	server := api.NewAPIServer(":8080", db)
+	server := api.NewAPIServer(":8080", db) // here we are Passing DB into the server NOT creating DB inside the server Making the server testable This is called Dependency Injection This is advanced backend design, not beginner.
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}

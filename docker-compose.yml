@@ -1,0 +1,26 @@
+services:
+  api:
+    build: .
+    container_name: ecom_api
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.4
+    container_name: ecom_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ecom
+      MYSQL_USER: ecom_user
+      MYSQL_PASSWORD: ecom_pass
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  mysql_data:

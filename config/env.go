@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 
@@ -22,38 +23,47 @@ type Config struct {
 var Envs = initConfig()
 
 func initConfig() Config {
-	godotenv.Load()
+	// Load .env only if present (local dev)
+	_ = godotenv.Load()
+
+	dbHost := mustGetEnv("DB_HOST")
+	dbPort := mustGetEnv("DB_PORT")
 
 	return Config{
 		PublicHost:             getEnv("PUBLIC_HOST", "http://localhost"),
 		Port:                   getEnv("PORT", "8080"),
-		DBUser:                 getEnv("DB_USER", "ecomuser"),
-		DBPassword:             getEnv("DB_PASSWORD", "mypassword"),
-		DBAddress:              fmt.Sprintf("%s:%s", getEnv("DB_HOST", "localhost"), getEnv("DB_PORT", "3306")),
-		DBName:                 getEnv("DB_NAME", "ecom"),
-		JWTSecret:              getEnv("JWT_SECRET", "not-secret-anymore"),
+		DBUser:                 mustGetEnv("DB_USER"),
+		DBPassword:             mustGetEnv("DB_PASSWORD"),
+		DBAddress:              fmt.Sprintf("%s:%s", dbHost, dbPort),
+		DBName:                 mustGetEnv("DB_NAME"),
+		JWTSecret:              mustGetEnv("JWT_SECRET"),
 		JWTExpirationInSeconds: getEnvAsInt("JWT_EXP", 3600*24*7),
 	}
 }
 
-// gets the env by key or fallbacks
+// must exist
+func mustGetEnv(key string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok || value == "" {
+		log.Fatalf("Missing required environment variable: %s", key)
+	}
+	return value
+}
+
+// optional with fallback
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
 	}
-
 	return fallback
 }
 
 func getEnvAsInt(key string, fallback int64) int64 {
 	if value, ok := os.LookupEnv(key); ok {
 		i, err := strconv.ParseInt(value, 10, 64)
-		if err != nil {
-			return fallback
+		if err == nil {
+			return i
 		}
-
-		return i
 	}
-
 	return fallback
 }
