@@ -31,6 +31,7 @@ This project demonstrates clean backend architecture, authentication, and contai
 ## 🐳 Run with Docker (Recommended)
 
 ### 1️⃣ Clone the repository
+```bash
 git clone https://github.com/Tejasvi1206/ECom_API.git
 cd ECom_API
 
@@ -98,20 +99,18 @@ Dockerized and working
 JWT authentication verified
 Clean build (go build ./...)
 Ready for deployment and extension
+```
 
-🔮 Future Improvements
-Role-based access control
-Pagination & filtering
-Order checkout flow
-Redis caching
-CI/CD pipeline
+## 🔮 Future Improvements
+- Role-based access control
+- Pagination & filtering
+- Order checkout flow
+- Redis caching
+- CI/CD pipeline
 
-👨‍💻 Author
+## 👨‍💻 Author
 
-Tejasvi
-Backend / Go Developer
-
-GitHub: https://github.com/Tejasvi1206
-
+- Tejasvi
+- Backend / Go Developer
 
 ---
